@@ -43,11 +43,17 @@ function drawChart( )
 			width : 800,
 			height : 600,
 
-			is3D: true
+            legend: {position: 'none'},
+            vAxis: {
+                viewWindow: {
+                    min: 0,
+                    max:120
+                }
+            }
 	};
 
 	// Instantiate the pie chart.
-	var chart = new google.visualization.PieChart( document.getElementById('chart_div') );
+	var chart = new google.visualization.ColumnChart( document.getElementById('chart_div') );
 	debugger;
 	// Draw the chart, passing in some configuration options.
 	chart.draw(data, options);
