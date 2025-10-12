@@ -20,7 +20,11 @@
                 .style("background-color", function (d){
                     if(d <= 15){ return "BLACK" }
                     else{ return "RED" }
-                });
+                })
+                .style("font-size", function (d){
+                    return d * 2 + "px"
+                })
+                .style("color", "WHITE");
         </script>
     </body>
 </html>

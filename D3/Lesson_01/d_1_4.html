@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="http://d3js.org/d3.v7.min.js"></script>
+    <title>Bar chart with divs</title>
+</head>
+<body>
+    <style type="text/css">
+        div.bar {
+        	display: inline-block;
+        	width: 40px;
+        	height: 75px; /* Overriden by D3-assigned height on script */
+        	margin-right: 10px;
+        	background-color: teal;
+        }
+    </style>
+
+    <script>
+        let dataset = [5, 10, 15, 20, 25, 30];
+
+        d3.select("body").selectAll("div")
+        .data(dataset)
+        .join("div")
+        .attr("class", "bar")
+        .style("height", function(d) {
+            return d*3 + "px";
+        });
+    </script>
+</body>
+</html>
