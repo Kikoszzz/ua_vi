@@ -1,78 +1,99 @@
-###############################################################################
-#       						Cone.py
-###############################################################################
-
-# This example creates a polygonal model of a Cone e visualize the results in a
-# VTK render window.
-# The program creates the cone, rotates it 360º and closes
-# The pipeline  source -> mapper -> actor -> renderer  is typical 
-# and can be found in most VTK programs
-
-# Imports
-
-# Import all VTK modules
 from vtkmodules.all import *
 
-# Import only needed modules
-# import vtkmodules.vtkInteractionStyle
-# import vtkmodules.vtkRenderingOpenGL2
-# from vtkmodules.vtkFiltersSources import vtkConeSource
-# from vtkmodules.vtkRenderingCore import (
-#     vtkActor,
-#     vtkPolyDataMapper,
-#     vtkRenderWindow,
-#     vtkRenderWindowInteractor,
-#     vtkRenderer
-# )
-
 def main():
-
-    # We Create an instance of vtkConeSource and set some of its
-    # properties. The instance of vtkConeSource "cone" is part of a
-    # visualization pipeline (it is a source process object); it produces data
-    # (output type is vtkPolyData) which other filters may process.
     
     coneSource = vtkConeSource()
-    
-    # We create an instance of vtkPolyDataMapper to map the polygonal data
-    # into graphics primitives. We connect the output of the cone source 
-    # to the input of this mapper.
+    coneSource.SetHeight(2)
+    coneSource.SetRadius(1)
+
+    coneSource.SetResolution(60)
   
     coneMapper = vtkPolyDataMapper()
     coneMapper.SetInputConnection( coneSource.GetOutputPort() )
-
-    # We create an actor to represent the cone. The actor orchestrates rendering
-    # of the mapper's graphics primitives. An actor also refers to properties
-    # via a vtkProperty instance, and includes an internal transformation
-    # matrix. We set this actor's mapper to be coneMapper which we created
-    # above.
   
     coneActor = vtkActor()
     coneActor.SetMapper(coneMapper)
 
-    # Create the Renderer and assign actors to it. A renderer is like a
-    # viewport. It is part or all of a window on the screen and it is
-    # responsible for drawing the actors it has.  We also set the background
-    # color here.
     ren = vtkRenderer()
-    ren.AddActor( coneActor )
+    ren.AddActor(coneActor)
+
+    ren.SetBackground(1, 1, 1)
+
+    cam1 = vtkCamera()
     
+    # cam1.SetPosition(10, 0, 0)
+    # cam1.SetViewUp(0, 1, 0)
+    
+    # cam1.SetPosition(10, 10, 0)
+    # cam1.SetViewUp(0, 1, 1)
+    # ren.SetActiveCamera(cam1)
+
+    # Same result without creating a new camera
+    # cam = ren.GetActiveCamera()
+    # cam.SetPosition(10, 0, 0)
+    # cam.SetViewUp(0, 1, 0)
+
+    cube = vtkCubeSource()
+    cubeMapper = vtkPolyDataMapper()
+    cubeMapper.SetInputConnection(cube.GetOutputPort())
+
+    cubeActor = vtkActor()
+    cubeActor.SetMapper(cubeMapper)
+    cubeActor.GetProperty().SetRepresentationToWireframe()
+
+    # ren.AddActor(cubeActor)
+
+    # Appearance in orthographic projection:
+        # No perspective distortion
+        # Parallel lines remain parallel
+        # The cube's edges do not converge
+        # Faces appear the same size regardless of distance
+        # Rotating the camera produces architectural-style drawings instead of the 3D-depth look
+    # cam = ren.GetActiveCamera()
+    # cam.SetParallelProjection(True)
+
+    # cam1 = ren.GetActiveCamera()
+    # light = vtkLight()
+    # # Create a pure red light source
+    # light.SetColor(1, 0, 0)
+    # # Place the light exactly at the camera's eye position, pointing in the same direction as the camera.
+    # light.SetFocalPoint(cam1.GetFocalPoint())
+    # light.SetPosition(cam1.GetPosition())
+    # ren.AddLight(light)
+    # # Effects:
+    #     # Whole scene becomes illuminated with a red tint
+    #         # The cone appears red-tinted, regardless of the origial material color
+    #     # There are no shadows
+    #         # No part of the cone becomes darker unless it faces away from the camera
+    #     # The lighting follows the camera
+    # # This happens because the light and the camera share the same position and direction
+
+
+
     # Finally we create the render window which will show up on the screen.
-    # We put our renderer into the render window using AddRenderer. We also
-    # set the size to be 300 pixels by 300.
+    # We put our renderer into the render window using AddRenderer.
+    # We also set the size to be 300 pixels by 300.
     
     renWin = vtkRenderWindow()
     renWin.AddRenderer(ren)
 
     renWin.SetWindowName('Cone')
+    # VTK's default render window size is 300 × 300 pixels if not changed.
+    renWin.SetSize(300, 300)
 
-    
-    # Now we loop over 360 degrees and render the cone each time.
-    for i in range(0,360):
-        # render the image
-        renWin.Render()
-        # rotate the active camera by one degree
-        ren.GetActiveCamera().Azimuth(1)
+    # # Now we loop over 360 degrees and render the cone each time.
+    # for i in range(0,360):
+    #     # render the image
+    #     renWin.Render()
+    #     # rotate the active camera by one degree
+    #     ren.GetActiveCamera().Azimuth(1)
+
+    # Adds a render window interactor to the cone example to
+    # enable user interaction (e.g. to rotate the scene)
+    iren = vtkRenderWindowInteractor()
+    iren.SetRenderWindow(renWin)
+    iren.Initialize()
+    iren.Start()
 
 
 if __name__ == '__main__':
