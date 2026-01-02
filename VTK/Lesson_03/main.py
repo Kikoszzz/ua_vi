@@ -1,7 +1,3 @@
-"""
-Lesson 3 - Callbacks, Glyphing and Picking
-"""
-
 from vtkmodules.vtkFiltersSources import *
 from vtkmodules.vtkFiltersCore import *
 from vtkmodules.vtkRenderingCore import *
@@ -47,14 +43,12 @@ def glyphing():
     sphereSource.SetThetaResolution(50)
     sphereSource.SetPhiResolution(50)
     
-    # Sphere actor - solid gray body
     sphereMapper = vtkPolyDataMapper()
     sphereMapper.SetInputConnection(sphereSource.GetOutputPort())
     
     sphereActor = vtkActor()
     sphereActor.SetMapper(sphereMapper)
     
-    # Glyph actor - cones at each vertex
     glyph = vtkGlyph3D()
     glyph.SetSourceConnection(coneSource.GetOutputPort())
     glyph.SetInputConnection(sphereSource.GetOutputPort())
@@ -79,7 +73,6 @@ def glyphing():
     interactor = vtkRenderWindowInteractor()
     interactor.SetRenderWindow(renderWindow)
     
-    # Configure o interactor style com o renderer
     style = vtkInteractorStyleTrackballCamera()
     style.SetCurrentRenderer(renderer)
     interactor.SetInteractorStyle(style)
